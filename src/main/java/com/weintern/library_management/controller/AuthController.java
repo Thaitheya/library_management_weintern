@@ -23,12 +23,13 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-        private final PasswordEncoder passwordEncoder;
-        private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public AuthController(PasswordEncoder passwordEncoder, UserRepository userRepository, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public AuthController(PasswordEncoder passwordEncoder, UserRepository userRepository,
+            AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
@@ -36,30 +37,28 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-        public ResponseEntity<String> registerUser(@Valid @RequestBody AuthRequestDTO requestDTO) {
-            if (userRepository.findByUsername(requestDTO.getUsername()).isPresent()) {
-                return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
-            }
-
-            User user = new User();
-            user.setUsername(requestDTO.getUsername());
-            user.setFullName(requestDTO.getFullName());
-            user.setEmail(requestDTO.getEmail());
-            user.setRole(requestDTO.getRole());
-            user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
-            user.setActive(true);
-            user.setCreatedAt(LocalDateTime.now());
-            user.setUpdatedAt(LocalDateTime.now());
-            userRepository.save(user);
-            return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
+    public ResponseEntity<String> registerUser(@Valid @RequestBody AuthRequestDTO requestDTO) {
+        if (userRepository.findByUsername(requestDTO.getUsername()).isPresent()) {
+            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
 
+        User user = new User();
+        user.setUsername(requestDTO.getUsername());
+        user.setFullName(requestDTO.getFullName());
+        user.setEmail(requestDTO.getEmail());
+        user.setRole(requestDTO.getRole());
+        user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
+        user.setActive(true);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+        return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody AuthRequestDTO requestDTO) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword()));
 
         User user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
         String token = jwtUtil.generateToken(user.getUsername());
