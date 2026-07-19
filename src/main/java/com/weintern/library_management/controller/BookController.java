@@ -1,9 +1,7 @@
 package com.weintern.library_management.controller;
 
 import com.weintern.library_management.models.Book;
-import com.weintern.library_management.repository.UserRepository;
 import com.weintern.library_management.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,11 @@ import java.util.List;
 @RequestMapping("/api/book")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
+
+    BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks(){

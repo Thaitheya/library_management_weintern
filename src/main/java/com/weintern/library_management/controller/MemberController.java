@@ -2,7 +2,6 @@ package com.weintern.library_management.controller;
 
 import com.weintern.library_management.models.Member;
 import com.weintern.library_management.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,11 @@ import java.util.List;
 @RequestMapping("/api/member")
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
+
+    MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Member>> getAllMembers() {
