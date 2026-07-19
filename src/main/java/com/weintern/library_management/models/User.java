@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.weintern.library_management.enums.Role;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,6 +32,8 @@ public class User {
     private String password;
     private String fullName;
     private String email;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
     private boolean active;
     private LocalDateTime createdAt;

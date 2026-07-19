@@ -28,6 +28,8 @@ public class Book {
     private int totalCopies;
     private int availableCopies;
     private String shelfLocation;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

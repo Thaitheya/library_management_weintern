@@ -27,14 +27,23 @@ public class MemberService {
     }
 
     public Member addMember(Member member) {
-        member.setCreatedAt(LocalDateTime.now());
-        if (member.getJoinDate() == null) {
-            member.setJoinDate(LocalDate.now());
-        }
-        // Default new members to active unless explicitly set otherwise
-        member.setStatus(true);
-        return memberRepository.save(member);
+
+    Long count = memberRepository.count() + 1;
+
+    String memberCode = String.format("MBR%03d", count);
+
+    member.setMemberCode(memberCode);
+
+    member.setCreatedAt(LocalDateTime.now());
+
+    if (member.getJoinDate() == null) {
+        member.setJoinDate(LocalDate.now());
     }
+
+    member.setStatus(true);
+
+    return memberRepository.save(member);
+}
 
     public Member updateMember(Long id, Member memberDetails) {
         Member existingMember = getAMember(id);

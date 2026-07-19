@@ -6,7 +6,10 @@ import java.time.LocalDate;
 import com.weintern.library_management.enums.IssueStatus;
 import com.weintern.library_management.enums.Status;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,7 +41,11 @@ public class BookIssue {
     private LocalDate dueDate;
     private LocalDate returnDate;
     private BigDecimal fine;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private IssueStatus issueStatus;
     private String remarks;
 

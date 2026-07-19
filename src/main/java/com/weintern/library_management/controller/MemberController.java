@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -18,7 +18,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Member>> getAllMembers() {
         List<Member> members = memberService.getAllMembers();
         return ResponseEntity.ok(members);
@@ -30,7 +30,7 @@ public class MemberController {
         return ResponseEntity.ok(member);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Member> addMember(@RequestBody Member member) {
         Member savedMember = memberService.addMember(member);
         return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
