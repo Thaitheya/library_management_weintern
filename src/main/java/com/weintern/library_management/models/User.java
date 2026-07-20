@@ -3,6 +3,7 @@ package com.weintern.library_management.models;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.weintern.library_management.enums.Role;
 
 import jakarta.persistence.Column;
@@ -39,6 +40,7 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "issuedBy")
     List<BookIssue> transactions;
 }

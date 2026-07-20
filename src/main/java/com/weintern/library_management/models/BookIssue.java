@@ -3,6 +3,7 @@ package com.weintern.library_management.models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.weintern.library_management.enums.IssueStatus;
 import com.weintern.library_management.enums.Status;
 
@@ -15,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,38 +25,38 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "book_issue")
 public class BookIssue {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long issue_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long issueId;
+
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
+
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user; 
+    @JoinColumn(name = "issued_by", nullable = false)
+    private User issuedBy;
+
     private LocalDate issueDate;
+
     private LocalDate dueDate;
+
     private LocalDate returnDate;
+
     private BigDecimal fine;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Status status;
-    @Column(nullable = false)
+
     @Enumerated(EnumType.STRING)
     private IssueStatus issueStatus;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     private String remarks;
-
-    @ManyToOne
-    Book books;
-
-    @ManyToOne
-    Member members;
-
-    @ManyToOne
-    User issuedBy;
 }

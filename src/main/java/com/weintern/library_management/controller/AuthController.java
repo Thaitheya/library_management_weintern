@@ -2,7 +2,7 @@ package com.weintern.library_management.controller;
 
 import com.weintern.library_management.models.User;
 import com.weintern.library_management.payload.AuthRequestDTO;
-import com.weintern.library_management.payload.AuthResponseDTO;
+import com.weintern.library_management.payload.LoginResponseDTO;
 import com.weintern.library_management.repository.UserRepository;
 import com.weintern.library_management.security.CustomUserDetails;
 import com.weintern.library_management.security.JwtUtil;
@@ -56,7 +56,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody AuthRequestDTO requestDTO) {
+    public LoginResponseDTO loginUser(@RequestBody AuthRequestDTO requestDTO) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -67,11 +67,10 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(user.getUsername());
 
-        return ResponseEntity.ok(
-                new AuthResponseDTO(
-                        token,
-                        user.getUsername(),
-                        user.getRole().name()));
+        return new LoginResponseDTO(
+                user.getId(),
+                token,
+                user.getUsername(),
+                user.getRole().name());
     }
-
 }
