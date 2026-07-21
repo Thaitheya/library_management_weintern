@@ -3,11 +3,8 @@ package com.weintern.library_management.models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.weintern.library_management.enums.IssueStatus;
 import com.weintern.library_management.enums.Status;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
