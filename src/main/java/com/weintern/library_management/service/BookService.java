@@ -92,7 +92,7 @@ public class BookService {
     }
 
     public void deleteBook(Long id) {
-        Book existingBook = getABook(id); // throws if not found
+        Book existingBook = getABook(id);
         bookRepository.delete(existingBook);
     }
 
