@@ -29,14 +29,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain)
             throws ServletException, IOException {
-        System.out.println("===== JWT FILTER =====");
+
+        System.out.println("========== JWT FILTER ==========");
         System.out.println("URI: " + request.getRequestURI());
 
         String authHeader = request.getHeader("Authorization");
         System.out.println("Authorization Header: " + authHeader);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("Bearer token not found");
+            System.out.println("No Bearer token found");
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,30 +45,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
         System.out.println("Token: " + token);
 
-        String username = jwtUtil.extractUsername(token);
-        System.out.println("Username: " + username);
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        try {
+            String username = jwtUtil.extractUsername(token);
+            System.out.println("Username: " + username);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            System.out.println("User Loaded: " + userDetails.getUsername());
-
             if (jwtUtil.isTokenValid(token, username)) {
-                System.out.println("Token Valid");
+                System.out.println("JWT VALID");
 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities());
 
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
-                System.out.println("Invalid Token");
+                System.out.println("JWT INVALID");
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         filterChain.doFilter(request, response);
